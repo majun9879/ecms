@@ -20,4 +20,5 @@ nbproject/private/
 build/
 nbbuild/
 nbdist/
+target/
 .nb-gradle/
