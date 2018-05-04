@@ -150,38 +150,34 @@ public class IndexController {
 			for (QuestionPage questionPage : questionPages) {
 				questions.add(questionPage.getQuestion());
 			}
-			PageHistory pageHistory = new PageHistory();
-			
-			PageHistory po = pageHistoryService.findByPageAndUser(page,user);
-			
+
+			PageHistory po = pageHistoryService.findByPageAndUserAndStatus(page, user, true);
+
 			long time = 0;
-			if(po!=null) {
-				time = page.getDuration()*60 + po.getCreateTime().getTime() - new Date().getTime();
-				if(time<0) {
-					po.setCreateTime(new Date());
-					pageHistoryService.saveAndFlush(po);
-					time = page.getDuration()*60 + po.getCreateTime().getTime() - new Date().getTime();
-					model.addAttribute("pageHistory", po);
-				}else {
-					model.addAttribute("pageHistory", po);
-				}
-			}else {
+			if (po != null) {
+				time = page.getDuration() * 60 + po.getCreateTime().getTime() - new Date().getTime();
+				model.addAttribute("pageHistory", po);
+
+			} else {
+
+				PageHistory pageHistory = new PageHistory();
+				pageHistory.setStatus(true);
 				pageHistory.setPage(page);
 				pageHistory.setUser(user);
 				pageHistory.setCreateTime(new Date());
 				pageHistoryService.saveAndFlush(pageHistory);
-				time = page.getDuration()*60 + pageHistory.getCreateTime().getTime() - new Date().getTime();
+
+				time = page.getDuration() * 60 + pageHistory.getCreateTime().getTime() - new Date().getTime();
 				model.addAttribute("pageHistory", pageHistory);
+
 			}
-			
-			
+
 			model.addAttribute("time", String.valueOf(time));
 			model.addAttribute("questions", questions);
 			model.addAttribute("page", page);
 			return "detail_page";
 		}
 	}
-	
 
 	@GetMapping("/strengthen")
 	public String strengthen(HttpSession session, Model model) {
@@ -448,28 +444,97 @@ public class IndexController {
 	@GetMapping("/submit_page")
 	@ResponseBody
 	Data submit_page(PageHistory pageHistory) {
-		
+
 		PageHistory po = pageHistoryService.findById(pageHistory.getId());
 		po.setAnswers(pageHistory.getAnswers());
 		float counts = 0;
-		
+
 		for (Integer key : po.getAnswers().keySet()) {
 			Question question = questionService.findById(key);
-		    String answer = po.getAnswers().get(key);
-		    if (answer.equals(question.getAnswer())) {
-		    	QuestionPage questionPage = questionPageService.findByPageAndQuestion(po.getPage(),question);
-		    	counts += questionPage.getPoints();
-		    }
+			String answer = po.getAnswers().get(key);
+			if (answer.equals(question.getAnswer())) {
+				QuestionPage questionPage = questionPageService.findByPageAndQuestion(po.getPage(), question);
+				counts += questionPage.getPoints();
+			}
 		}
 		po.setCounts(counts);
-		
+		po.setStatus(false);
 		pageHistoryService.saveAndFlush(po);
-		
+
 		return Data.success(Data.NOOP);
 	}
-	
+
 	@GetMapping("/user_page")
-	public String user_page() {
+	public String user_page(Model model, HttpSession session) {
+		User user = (User) session.getAttribute(Const.LOGIN_ADMIN);
+		if (user == null) {
+			return "redirect:/admin/login";
+		}
+		user = userService.findByUsername(user.getUsername());
+		List<PageHistory> pageHistories = pageHistoryService.findAllByPageAndUserAndStatus(null, user, false);
+		
+		model.addAttribute("list", pageHistories);
 		return "user_page";
+	}
+	
+	@GetMapping("/user_question")
+	public String user_question(Model model, HttpSession session) {
+		User user = (User) session.getAttribute(Const.LOGIN_ADMIN);
+		if (user == null) {
+			return "redirect:/admin/login";
+		}
+		user = userService.findByUsername(user.getUsername());
+		if (user.getFieldId() != null && user.getFieldId() > 0) {
+			Field field = fieldService.findById(user.getFieldId());
+			Set<KnowledgePoint> knowledgePoints = knowledgePointService.getKnowledgePointByField(field);
+			LinkedHashMap<String, List<QuestionImproveResult>> list = new LinkedHashMap<>();
+			LinkedHashMap<String, Float> points = new LinkedHashMap<>();
+			List<QuestionType> qTypes = questionTypeService.findAll();
+			for (KnowledgePoint knowledgePoint : knowledgePoints) {
+				List<QuestionImproveResult> tmp = new ArrayList<>();
+				float sum = 0;
+				float sure = 0;
+				for (QuestionType questionType : qTypes) {
+					List<Question> questions = questionService.findAllByFieldAndKnowledgePointAndQuestionType(field,
+							knowledgePoint.getId(), questionType);
+					if (questions != null && questions.size() > 0) {
+						QuestionImproveResult result = new QuestionImproveResult();
+						result.setKnowledgePointId(knowledgePoint.getId());
+						result.setKnowledgePointName(knowledgePoint.getName());
+						result.setQuestionTypeId(questionType.getId());
+						result.setQuestionTypeName(questionType.getName());
+						result.setAmount(questions.size());
+						Integer wrong = 0, right = 0;
+						for (Question question : questions) {
+							QuestionHistory questionHistory = questionHistoryService.findByUserAndQuestion(user,
+									question);
+							if (questionHistory != null) {
+								if (questionHistory.getFlag()) {
+									right++;
+								} else {
+									wrong++;
+								}
+							}
+						}
+						result.setWrongTimes(wrong);
+						result.setRightTimes(right);
+						tmp.add(result);
+						sum+=questions.size();
+						sure+=right;
+					}
+				}
+				list.put(knowledgePoint.getName(), tmp);
+				if(sum!=0 && sure!=0) {
+					points.put(knowledgePoint.getName(), sure/sum*100);
+				}else {
+					points.put(knowledgePoint.getName(), (float) 0);
+				}
+			}
+			model.addAttribute("points", points);
+			model.addAttribute("list", list);
+			return "uesr_question";
+		}else {
+			return "error/field_unfound";
+		}
 	}
 }

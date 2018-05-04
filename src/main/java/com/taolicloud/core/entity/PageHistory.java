@@ -61,6 +61,9 @@ public class PageHistory implements Serializable {
 	@Column(name = "create_time")
 	private Date createTime;
 
+	@Column(name = "status")
+	private Boolean status;
+
 	public Integer getId() {
 		return id;
 	}
@@ -107,6 +110,14 @@ public class PageHistory implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 }

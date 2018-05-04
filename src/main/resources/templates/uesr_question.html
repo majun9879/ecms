@@ -12,6 +12,7 @@
 		<!--Theme style-->
 		<link rel="stylesheet" type="text/css" href="${path}/dist/css/AdminLTE.min.css" />
 		<link rel="stylesheet" type="text/css" href="${path}/css/setting.css" />
+		<link rel="stylesheet" type="text/css" href="${path}/css/user_question.css" />
 		<!--AdminLTE Skins-->
 		<link rel="stylesheet" type="text/css" href="${path}/dist/css/skins/skin-blue.min.css" />
 		<!-- <link rel="icon" href="${path}/img/favicon.ico" type="image/x-icon" />
@@ -44,8 +45,8 @@
 			      <ul class="nav navbar-nav">
 			        <li><a href="/index"><i class="fa fa-home"></i>首页 <span class="sr-only">(current)</span></a></li>
 			        <li><a href="/practice"><i class="fa fa-edit"></i>试题练习</a></li>
-			        <li><a href="/user_question"><i class="fa fa-dashboard"></i>会员管理</a></li>
-			        <li class="active"><a href="#"><i class="fa fa-cogs"></i>个人中心</a></li>
+			        <li class="active"><a href="#"><i class="fa fa-dashboard"></i>会员管理</a></li>
+			        <li><a href="/setting"><i class="fa fa-cogs"></i>个人中心</a></li>
 			       
 			      </ul>
 			      <ul class="nav navbar-nav navbar-right">
@@ -63,73 +64,52 @@
 			<div class="col-xs-3">
 				<ul class="nav default-sidenav">
 					<li class="active">
-						<a> <i class="fa fa-cogs"></i> 基本资料 </a>
+						<a href="#"> <i class="fa fa-bar-chart-o"></i> 统计分析</a>
 					</li>
 					<li>
-						<a href="/admin/user/pwd"> <i class="fa fa-wrench"></i> 修改密码 </a>
+						<a href="/user_page"> <i class="fa fa-history"></i> 练习历史</a>
 					</li>
 	
 				</ul>
 			</div>
 			<div class="col-xs-9">
 				<div class="page-header">
-					<h1><i class="fa fa-cogs"></i> 基本资料</h1>
+					<h1><i class="fa fa-bar-chart-o"></i> 统计分析</h1>
 				</div>
-				<div class="page-content row">
-					<form class="form-horizontal" id="form-change-password" action="setting" style="margin-top:40px;" method="post">
-						<input type="hidden" id="id" name="id" value="${user.id}"/>
-						
-						<div class="form-group form-username">
-							<label class="control-label col-md-2" for="username">账号</label>
-							<div class="col-md-5">
-								<input type="text" class="form-control" id="username" name="username" disabled="disabled" value="${user.username}">
-								<span class="form-message"></span>
-							</div>
-						</div>
-						
-						<div class="form-group form-job-type">
-							<label class="control-label col-md-2" for="fieldId">专业</label>
-							<div class="col-md-5">
-								<select class="form-control" id="fieldId" name="fieldId">
-									<option value="-1">--请选择--</option>
-									<#list fields as field>
-										<#if user.fieldId?? && user.fieldId = field.id>
-											<option value="${field.id}" selected="selected">${field.name}</option>
-										<#else>
-											<option value="${field.id}">${field.name}</option>
-										</#if>
-									</#list>
-								</select>
-								<span class="form-message"></span>
-							</div>
-						</div>
-						
-						<div class="form-group form-password-confirm">
-							<label class="control-label col-md-2" for="phone">手机</label>
-							<div class="col-md-5">
-								<input type="text" class="form-control" id="phone" name="phone" value="${user.phone!}">
-								<span class="form-message"></span>
-							</div>
-						</div>
-						
-						<div class="form-group form-email">
-							<label class="control-label col-md-2" for="email">email</label>
-							<div class="col-md-5">
-								<input type="email" class="form-control" id="email" name="email" value="${user.email!}">
-								<span class="form-message"></span>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<!-- Buttons -->
-							<div class="col-md-5 col-md-offset-2">
-								<button type="submit" class="btn" id="btn-reg">
-									确认修改
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
+				<#list list?keys as key>
+					<div id="question-list">
+						<h6>&nbsp;&nbsp;${key}</h6>
+						<span style="color:#428bca;">&nbsp;&nbsp;&nbsp;学习进度：${points[key]}%</span>
+						<table class="table-striped table">
+							<#if list[key]?size gt 0>
+								<thead>
+									<tr>
+										<td>题型</td><td>未做</td><td>正确</td><td>错误</td>
+									</tr>
+								</thead>
+							<#else>
+							</#if>
+							<tbody>
+								<#list list[key] as tp>
+									<tr>
+										<td>
+											${tp.questionTypeName}
+										</td>
+										<td>
+											${tp.amount- tp.rightTimes - tp.wrongTimes}
+										</td>
+										<td>
+											${tp.rightTimes}
+										</td>
+										<td>
+											${tp.wrongTimes}
+										</td>
+									</tr>
+								</#list>
+							</tbody><tfoot></tfoot>
+						</table>
+					</div>
+				</#list>
 			</div>
 		</div>
 		<footer class="footer bg-gray color-palette" style="margin-top: 404px">

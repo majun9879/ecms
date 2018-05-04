@@ -8,7 +8,11 @@
  */
 package com.taolicloud.core.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -91,8 +95,36 @@ public class PageHistoryServiceImpl implements PageHistoryService {
 	}
 
 	@Override
-	public PageHistory findByPageAndUser(com.taolicloud.core.entity.Page page, User user) {
-		return historyDao.findByPageAndUser(page,user);
+	public PageHistory findByPageAndUserAndStatus(com.taolicloud.core.entity.Page page, User user, Boolean flag) {
+		return historyDao.findByPageAndUserAndStatus(page, user, flag);
 	}
 
+	@Override
+	public List<PageHistory> findAllByPageAndUserAndStatus(com.taolicloud.core.entity.Page page, User user, Boolean flag) {
+		List<PageHistory> pageHistories = historyDao.findAll((root, query, builder) -> {
+
+			List<Order> orders = new ArrayList<>();
+
+			orders.add(builder.asc(root.<Long>get("id")));
+
+			Predicate predicate = builder.conjunction();
+
+			if (page != null && page.getId() > 0) {
+				predicate.getExpressions().add(
+						builder.equal(root.get("page").as(com.taolicloud.core.entity.Page.class), page));
+			}
+			
+			if (user != null && user.getId() > 0) {
+				predicate.getExpressions().add(
+						builder.equal(root.get("user").as(User.class), user));
+			}
+			
+			predicate.getExpressions().add(
+					builder.equal(root.get("status").as(Boolean.class), flag));
+			
+			query.orderBy(orders);
+			return predicate;
+		});
+		return pageHistories;
+	}
 }
