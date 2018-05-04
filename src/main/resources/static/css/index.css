@@ -1,0 +1,43 @@
+.icon_photo {
+    padding-bottom: 13px;
+}
+a {
+    text-decoration: none;
+}
+a {
+    background-color: transparent;
+}
+
+.icon_column span {
+    font-size: 18px;
+    display: block;
+    color: #231f20;
+    line-height: 21px;
+}
+
+.icon_column {
+    width: 25%;
+    padding: 0 10px;
+}
+.pull-left {
+    float: left!important;
+}
+.icon_content_holder {
+    padding: 35px 0 52px 0;
+    overflow: hidden;
+}
+
+.center_content {
+    max-width: 1375px;
+    margin: 0 auto;
+    min-height: 64px;
+    padding-top: 11px;
+    position: relative;
+}
+
+.text-center {
+    text-align: center;
+}
+.footer {
+	height: 76px;
+}

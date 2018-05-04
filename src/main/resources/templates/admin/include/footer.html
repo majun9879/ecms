@@ -1,0 +1,10 @@
+<footer class="main-footer">
+  <div class="text-center">
+  	当前系统版本:&nbsp;&nbsp;ECMS 1.0 &nbsp;上次登录时间:&nbsp;&nbsp;
+  	<#if login_admin.lastLoginTime??>
+  	${login_admin.lastLoginTime}&nbsp;
+  	<#else>
+  	${login_admin.createTime}&nbsp;
+  	</#if>已用内存:&nbsp;&nbsp;414.99MB &nbsp;剩余内存:&nbsp;&nbsp;1324.01MB &nbsp;最大内存:&nbsp;&nbsp;1739MB
+  </div> 
+</footer>

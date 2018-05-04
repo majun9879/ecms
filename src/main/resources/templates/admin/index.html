@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<#include "/admin/include/title.html"/>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<!--Bootstrap 3.3.7-->
+		<link rel="stylesheet" href="${path}/common/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="${path}/common/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="${path}/common/Ionicons/css/ionicons.min.css" />
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/AdminLTE.min.css" />
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/skins/skin-blue.min.css" />
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="${path}/js/html5shiv/3.7.3/html5shiv.min.js" ></script>
+			<script type="text/javascript" src="${path}/js/respond/1.4.2/respond.min.js" ></script>	
+		<![endif]-->
+		<!--Google Font-->
+		<link rel="stylesheet" href="${path}/css/fonts.googleapis.com.css" />
+	</head>
+
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<#include "/admin/include/header.html"/>
+			<!--Left side column. contains the logo and sidebar -->
+			<aside class="main-sidebar">
+				<section class="sidebar">
+			    	<ul class="sidebar-menu" data-widget="tree">
+				        <li class="header text-center" style="color: white;font-weight: 500;font-size: 16px;">系统菜单</li>
+				        <li>
+				        	<a href="${path}/admin/index">
+				        		<i class="fa fa-tv"></i> <span>工作台</span>
+				        	</a>
+				        </li>
+				       
+				        <li class="treeview">
+					        <a href="#">
+						        <i class="fa fa-user"></i> <span>用户管理</span>
+						        <span class="pull-right-container">
+						        	<i class="fa fa-angle-left pull-right"></i>
+						        </span>
+					        </a>
+				        <ul class="treeview-menu">
+							<#if login_admin.typeName?? && (login_admin.typeName="ADMIN") >
+								<li><a href="${path}/admin/user/list.html"><i class="fa fa-user-md"></i> 管理员</a></li>
+							</#if>
+				         	<li><a href="${path}/admin/user/pwd.html"><i class="fa fa-user-secret"></i>安全设置</a></li>
+				        </ul>
+				        </li>
+				        <#if login_admin.typeName?? && (login_admin.typeName="ADMIN" )>
+							<li class="treeview">
+								<a href="#">
+									<i class="glyphicon glyphicon-th"></i>
+									<span>试题管理</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<#if login_admin.typeName?? && (login_admin.typeName="ADMIN" || login_admin.typeName="TEACHER")>
+										<li>
+											<a href="${path}/admin/question/list-0-0-0.html">
+												<i class="glyphicon glyphicon-th-large"></i> 试题列表
+											</a>
+										</li>
+										<li>
+											<a href="${path}/admin/question/add">
+												<i class="fa fa-plus"></i> 添加试题</a>
+										</li>
+									</#if>
+								</ul>
+							</li>
+						</#if>
+						<#if login_admin.typeName?? && (login_admin.typeName="ADMIN" || login_admin.typeName="TEACHER")>
+							<li class="treeview">
+								<a href="#">
+									<i class="glyphicon glyphicon-book"></i><span>内容管理</span><span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<li>
+										<a href="${path}/admin/field/list.html">
+											<i class="glyphicon glyphicon-bookmark"></i> 题库管理
+										</a>
+									</li>
+									<li>
+										<a href="${path}/admin/knowledgePoint/list.html">
+											<i class="glyphicon glyphicon-map-marker"></i> 知识点管理
+										</a>
+									</li>
+									<li>
+										<a href="${path}/admin/page/list.html">
+											<i class="fa fa-file-text"></i> 试卷管理
+										</a>
+									</li>
+								</ul>
+							</li>
+						</#if>
+			    	</ul>
+				</section>
+			</aside>
+			<!-- / left side column-->
+
+			<!--Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- content-header -->
+				<section class="content-header">
+					<h1>
+						<small style="color: #737373;">
+							<a href="#"><i class="fa fa-home"></i></a>
+							<i class="fa fa-angle-double-right"></i>首页
+						</small>
+					</h1>
+				</section>
+				<!-- /.content-header -->
+				<section class="content">
+					<div class="panel  panel-info">
+						<div class="panel-body">
+							<div class="col-md-3 no-margin no-padding">
+								<i class="fa fa-check"></i> 欢迎登录XBuilder系统!	
+							</div>
+							<div class="col-md-2 no-margin no-padding">
+								<a href="#><i class="fa fa-user"></i> 修改个人信息</a>	
+							</div>
+							<div class="col-md-3 no-margin no-padding">
+								您上次登录的时间：2017-09-01	
+							</div>
+							<div class="col-md-4 no-margin no-padding text-right hidden-sm hidden-xs">
+								<span>已用内存：<small style="color:#005384">256MB</small>&nbsp; </span> 
+								<span>剩余内存：<small style="color: #00733E;">1024.5MB</small> &nbsp;</span>
+								<span> 最大内存：<small>1280.5MB</small></span>	
+							</div>
+						</div>	
+					</div>
+					<div class="row" style="margin: 1px;">
+						<!-- left container-->
+						<div class="col-md-8">
+							<div class="row">
+								<div class="panel">
+									<div class="panel-heading no-margin">
+										<h4 class="text-blue">网站数据统计 <i class="fa fa-caret-down"></i></h4>
+									</div>
+									<div class="panel-body no-padding">
+										<div class="nav-tabs-custom no-margin">
+											<ul class="nav nav-tabs">
+												<li class="active"><a href="#today" data-toggle>今日</a></li>
+												<li><a href="#weekday" data-toggle>本周</a></li>
+												<li><a href="#month" data-toggle>本月</a></li>
+												<li><a href="#all" data-toggle>总计</a></li>
+											</ul>
+											<div class="tab-content">
+												<div class="active tab-pane" id="today">
+													<table class="table table-bordered">
+														<tbody>
+															<tr>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-aqua info-box-icon" style="border-radius: 50%;"><li class="fa fa-bar-chart"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-aqua">176</h3>
+																			<span>网站访问量</span>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-green info-box-icon" style="border-radius: 50%;"><li class="fa fa-folder-open-o"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-green">5</h3>
+																			<span>发布文章数量</span>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-red info-box-icon" style="border-radius: 50%;"><li class="fa fa-check-square-o"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-red">0</h3>
+																			<span>待审核文章</span>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-yellow info-box-icon" style="border-radius: 50%;"><li class="fa fa-comments"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-yellow">18</h3>
+																			<span>评论数</span>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-purple info-box-icon" style="border-radius: 50%;"><li class="fa fa-edit"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-purple">47</h3>
+																			<span>留言板</span>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div class="row">
+																		<div class="col-md-4">
+																			<span class="bg-blue info-box-icon" style="border-radius: 50%;"><li class="fa fa-users"></li></span>
+																		</div>
+																		<div class="col-md-8">
+																			<h3 class="text-blue">5</h3>
+																			<span>注册人数</span>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="panel">
+									<div class="panel-heading no-margin">
+										<h4 class="text-blue">访问量数据分析 <i class="fa fa-caret-down"></i></h4>
+									</div>
+									<div class="panel-body no-padding">
+										<div class="nav-tabs-custom no-margin">
+											<ul class="nav nav-tabs">
+												<li class="active"><a href="#today" data-toggle>今日</a></li>
+												<li><a href="#weekday" data-toggle>本周</a></li>
+												<li><a href="#month" data-toggle>本月</a></li>
+												<li><a href="#year" data-toggle>今年</a></li>
+											</ul>
+											<div class="tab-content">
+												<div class="active tab-pane" id="today">
+													<div id="chart-today" style="width: 100%;height: 400px;"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /left container -->
+						
+						<div class="col-md-4" style="padding-right: 0;">
+							<div class="panel">
+								<div class="panel-heading">
+									<h4 class="text-blue">栏目访问量统计 <i class="fa fa-caret-down"></i></h4>
+								</div>
+								<div class="panel-body no-padding">
+									<div class="nav-tabs-custom no-margin">
+										<ul class="nav nav-tabs">
+											<li class="active"><a href="#today" data-toggle>今日</a></li>
+											<li><a href="#weekday" data-toggle>本周</a></li>
+											<li><a href="#month" data-toggle>本月</a></li>
+											<li><a href="#all" data-toggle>总计</a></li>
+										</ul>
+										<div class="tab-content">
+											<div class="active tab-pane" id="today">
+												<table class="table">
+													<tbody>
+														<tr>
+															<td><span class="label bg-red">1</span> &nbsp;新闻</td>
+															<td>55</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-yellow">2</span> &nbsp;分享</td>
+															<td>42</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-blue">3</span> &nbsp;博客</td>
+															<td>35</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-gray">4</span> &nbsp;招聘</td>
+															<td>30</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-gray">5</span> &nbsp;文档</td>
+															<td>30</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-gray">6</span> &nbsp;技术</td>
+															<td>30</td>
+														</tr>
+														<tr>
+															<td><span class="label bg-gray">7</span> &nbsp;文库</td>
+															<td>30</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel">
+								<div class="panel-heading">
+									<h4 class="text-blue">网站用户访问搜索引擎 <i class="fa fa-caret-down"></i></h4>
+								</div>
+								<div class="panel-body no-padding">
+									<div class="nav-tabs-custom no-margin">
+										<ul class="nav nav-tabs">
+											<li class="active"><a href="#today" data-toggle>今日</a></li>
+											<li><a href="#weekday" data-toggle>本周</a></li>
+											<li><a href="#month" data-toggle>本月</a></li>
+											<li><a href="#all" data-toggle>总计</a></li>
+										</ul>
+										<div class="tab-content">
+											<div class="active tab-pane" id="today">
+												<div id="chart-from-today" style="width: 100%;height: 200px;"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<!-- / content wrapper-->
+
+			<!-- footer -->
+			<#include "/admin/include/footer.html"/>
+		</div>
+		<!-- /.wrapper -->
+
+		<!--jQuery-->
+		<script type="text/javascript" src="${path}/common/jquery/dist/jquery.min.js"></script>
+		<!--jQuery UI-->
+		<script type="text/javascript" src="${path}/common/jquery-ui/jquery-ui.min.js"></script>
+		<script>
+			$.widget.bridge('uibutton', $.ui.button);
+		</script>
+		<!--Bootstrap-->
+		<script type="text/javascript" src="${path}/common/bootstrap/dist/js/bootstrap.min.js"></script>
+
+		<!--AdminLTE App-->
+		<script type="text/javascript" src="${path}/dist/js/adminlte.min.js"></script>
+		<!--<script type="text/javascript" src="${path}/dist/js/pages/dashboard.js" ></script>-->
+		<script type="text/javascript" src="${path}/plugins/echarts/3.7.1/echarts.js" ></script>
+		<script type="text/javascript" src="${path}/js/my-echarts/echarts.main.index.js" ></script>
+		<script type="text/javascript">
+			var myChart = echarts.init(document.getElementById('chart-from-today'));
+			option = {
+			    tooltip : {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b} : {c} ({d}%)"
+			    },
+			    legend: {
+			        orient: 'vertical',
+			        left: 'left',
+			        data: ['360','必应','Google','搜狗','百度','其他']
+			    },
+			    toolbox: {
+			        feature: {
+			            saveAsImage: {}
+			        }
+			    },
+			    series : [
+			        {
+			            name: '访问来源',
+			            type: 'pie',
+			            radius : '55%',
+			            center: ['50%', '60%'],
+			            data:[
+			                {value:335, name:'360'},
+			                {value:310, name:'必应'},
+			                {value:234, name:'Google'},
+			                {value:135, name:'搜狗'},
+			                {value:1548, name:'百度'},
+			                {value:150,name:'其他'}
+			            ],
+			            itemStyle: {
+			                emphasis: {
+			                    shadowBlur: 10,
+			                    shadowOffsetX: 0,
+			                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			                }
+			            }
+			        }
+			    ]
+			};
+			window.onresize = myChart.resize;
+			myChart.setOption(option);
+		</script>
+	</body>
+
+</html>

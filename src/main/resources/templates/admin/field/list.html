@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<#include "/admin/include/title.html"/>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+		<link rel="stylesheet" href="${path}/common/bootstrap/dist/css/bootstrap.min.css" />
+		<!--Font Awesome-->
+		<link rel="stylesheet" href="${path}/common/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="${path}/common/Ionicons/css/ionicons.min.css" />
+		<!--Theme style-->
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/AdminLTE.min.css" />
+		<!--AdminLTE Skins-->
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/skins/skin-blue.min.css" />
+		<!-- <link rel="icon" href="${path}/img/favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="${path}/img/favicon.ico" type="image/x-icon"/> -->
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="${path}/js/html5shiv/3.7.3/html5shiv.min.js}" ></script>
+			<script type="text/javascript" src="${path}/js/respond/1.4.2/respond.min.js}" ></script>	
+		<![endif]-->
+		<link rel="stylesheet" href="${path}/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="${path}/plugins/layer-v3.0.3/layer/skin/default/layer.css" />
+	</head>
+
+	<body class="hold-transition skin-blue sidebar-mini">
+		<div class="wrapper">
+			<#include "/admin/include/header.html"/>
+			<!--Left side column. contains the logo and sidebar -->
+			<aside class="main-sidebar">
+				<section class="sidebar">
+			    	<ul class="sidebar-menu" data-widget="tree">
+				        <li class="header text-center" style="color: white;font-weight: 500;font-size: 16px;">系统菜单</li>
+				        <li>
+				        	<a href="${path}/admin/index">
+				        		<i class="fa fa-tv"></i> <span>工作台</span>
+				        	</a>
+				        </li>
+				       
+				        <li class="treeview">
+					        <a href="#">
+						        <i class="fa fa-user"></i> <span>用户管理</span>
+						        <span class="pull-right-container">
+						        	<i class="fa fa-angle-left pull-right"></i>
+						        </span>
+					        </a>
+				        <ul class="treeview-menu">
+							<#if login_admin.typeName?? && (login_admin.typeName="ADMIN") >
+								<li><a href="${path}/admin/user/list.html"><i class="fa fa-user-md"></i> 管理员</a></li>
+							</#if>
+				         	<li><a href="${path}/admin/user/pwd.html"><i class="fa fa-user-secret"></i>安全设置</a></li>
+				        </ul>
+				        </li>
+				        <#if login_admin.typeName?? && (login_admin.typeName="ADMIN" )>
+							<li class="treeview">
+								<a href="#">
+									<i class="glyphicon glyphicon-th"></i>
+									<span>试题管理</span>
+									<span class="pull-right-container">
+										<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<#if login_admin.typeName?? && (login_admin.typeName="ADMIN" || login_admin.typeName="TEACHER")>
+										<li>
+											<a href="${path}/admin/question/list-0-0-0.html">
+												<i class="glyphicon glyphicon-th-large"></i> 试题列表
+											</a>
+										</li>
+										<li>
+											<a href="${path}/admin/question/add">
+												<i class="fa fa-plus"></i> 添加试题</a>
+										</li>
+									</#if>
+								</ul>
+							</li>
+						</#if>
+						<#if login_admin.typeName?? && (login_admin.typeName="ADMIN" || login_admin.typeName="TEACHER")>
+							<li class="active treeview">
+								<a href="#">
+									<i class="glyphicon glyphicon-book"></i><span>内容管理</span><span class="pull-right-container">
+									<i class="fa fa-angle-left pull-right"></i>
+									</span>
+								</a>
+								<ul class="treeview-menu">
+									<li class="active">
+										<a href="${path}/admin/field/list.html">
+											<i class="glyphicon glyphicon-bookmark"></i> 题库管理
+										</a>
+									</li>
+									<li>
+										<a href="${path}/admin/knowledgePoint/list.html">
+											<i class="glyphicon glyphicon-map-marker"></i> 知识点管理
+										</a>
+									</li>
+									<li>
+										<a href="${path}/admin/page/list.html">
+											<i class="fa fa-file-text"></i> 试卷管理
+										</a>
+									</li>
+								</ul>
+							</li>
+						</#if>
+			    	</ul>
+				</section>
+			</aside>
+			<!-- / left side column-->
+			<div class="content-wrapper">
+				<!-- content-header -->
+				<section class="content-header">
+			      <h1>
+			        <small style="color:#737373;">
+			        	<a href="${path}/admin/index"><i class="fa fa-home"></i></a> 
+			        	<i class="fa fa-angle-double-right"></i> 题库管理 
+			        	<i class="fa fa-angle-double-right"></i> 题库列表
+			        </small>
+			      </h1>
+			    </section>
+				<!-- /.content-header -->
+				<section class="content">
+					<div class="row" style="padding: 0 15px 10px 15px;">
+						<div style="float: left;">
+							<a href="${path}/admin/field/add" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> 添加题库</a>
+							<button type="button" class="btn btn-danger btn-sm" onclick="deleteBatch()"><i class="fa fa-trash"></i> Delete</button>
+						</div>
+						<div class="pull-right">
+							<button type="button" class="btn btn-default btn-sm btn-refresh"><i class="fa fa-refresh"></i> Refresh</button>
+						</div>
+					</div>
+					<div class="box box-solid">
+						<div class="box-body table-responsive no-padding">
+							<table class="table table-hover text-center">
+								<thead>
+									<tr>
+										<td width="20"><input id="check-all" type="checkbox"/></td>
+										<th>编号</th>
+										<th>题库名</th>
+										<th>描述</th>
+										<th>状态</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<#if page.getContent()??>
+										<#list page.getContent() as field>
+											<tr>
+												<td><input value="${field.id}" type="checkbox"/></td>
+												<td>${field.id}</td>
+												<td>${(field.name)!}</td>
+												<td><span class="hot_title">${(field.memo)!}</span></td>
+												<td>
+													<#switch field.status>
+														<#case 1>
+															<span class="state label label-success">INUSE</span>
+															<#break>
+														<#default>
+															<span class="state label label-warning">UNUSE</span>
+													</#switch>
+												</td>
+												<td>
+													<a href="${path}/admin/field/edit/${field.id}" class="text-info"><i class="fa fa-edit"></i> 编辑</a>&nbsp;
+													<a href="javascript:void(0);" id="delete-field" class="text-red" onclick="delete_field(this,${field.id})"><i class="fa  fa-trash"></i> 删除</a> 
+												</td>
+											</tr>
+										</#list>
+									</#if>
+								</tbody>
+							</table>
+						</div>
+						<div class="box-footer">
+							<div class="row">
+								<#assign url="admin/field/list">
+								<#include "/admin/include/page_inc.html"/>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<#include "/admin/include/footer.html"/>
+		</div>
+		<script type="text/javascript" src="${path}/common/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="${path}/common/jquery-ui/jquery-ui.min.js"></script>
+		<script>
+			$.widget.bridge('uibutton', $.ui.button);
+		</script>
+		<script type="text/javascript" src="${path}/js/plugs.js"></script>
+		<script type="text/javascript" src="${path}/common/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${path}/dist/js/adminlte.min.js"></script>
+		<script type="text/javascript" src="${path}/plugins/layer-v3.0.3/layer/layer.js" ></script>
+		<script type="text/javascript">
+		
+			/**
+				删除用户
+			*/
+			function delete_field(obj,id){
+				var offset = $(obj).offset();
+				layer.open({
+					type:5,
+					title:false,
+					shadeClose:true,
+					shade:0,
+					skin: 'layui-layer-molv',
+					btn:['确认','取消'],
+					btnAlign:'c',
+					offset:[offset.top-60,offset.left-120],
+					yes:function(index){
+						$.ajax({
+							url:"${path}/admin/field/delete/"+id,
+							type:"DELETE",
+							contentType:"application/x-www-form-urlencoded",
+							encoding:"utf-8",
+							cache:false,
+							success:function(msg){
+								if(msg=="Y"){
+									layer.close(index);
+									layer.msg('成功删除数据', {icon: 1,offset: 't', anim: 5});
+									location.reload();
+								}
+							}
+						});
+						return false;
+					},
+					close:function(){
+						return false;
+					}
+				});
+			}
+			
+			$(".btn-refresh").on("click",function(){
+				location.reload();
+			});
+			
+			$(".hot_title").each(function(n){
+		    	$(this).html($.fixWidth($(this).html(),{length:15,suffix:".",fillLength:3}));
+		    });
+			
+			/* 全选按钮 */
+			$("#check-all").on("click",function(){
+				if(this.checked){
+					$("input[type=checkbox]").prop("checked",true);
+				}else{
+					$("input[type=checkbox]").prop("checked",false);
+				}
+			});
+			
+			function deleteBatch(){
+				var ids = [];
+				var doms = $("tbody input[type=checkbox]:checked");
+				for(var i=0;i<doms.length;i++){
+					if(doms[i].checked){
+						ids[i]=doms[i].value;
+					}
+				}
+				if(ids.length<=0){
+					top.layer.open({
+						title:false,
+						icon:5,
+						content:'请选择需要删除的数据',
+						offset:'15px'
+					});
+				}else{
+					top.layer.open({
+						title:false,
+						icon:2,
+						content:'确认删除？',
+						offset:'15px',
+						btn:['确认','取消'],
+						btnAlign:'c',
+						yes:function(index){
+							$.ajax({
+								url:"${path}/admin/field/deleteBatch",
+								type:'POST',
+								data:{
+									ids:ids.toString()
+								},
+								contentType:'application/x-www-form-urlencoded',
+								encoding:'utf-8',
+								cache:false,
+								success:function(msg){
+									if(msg == "ok"){
+										layer.close(index);
+										location.reload();
+									}
+								}
+							});
+							
+						},
+						cancel:function(index){
+							layer.close(index);
+							return false;
+						}
+					});
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,18 @@
+.has-error {
+    border-color: #a94442;
+}
+.question-point {
+    padding: 0 8px;
+    margin: 0 2px;
+    border-bottom: 1px solid;
+    cursor: pointer;
+    color: #428bca;
+}
+.tmp-ques-remove {
+    color: rgb(245, 70, 70);
+    cursor: pointer;
+}
+.img-responsive{
+	height: 300px;
+	width: 500px
+}

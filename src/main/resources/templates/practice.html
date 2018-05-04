@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<#include "/admin/include/title.html"/>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+		<link rel="stylesheet" href="${path}/common/bootstrap/dist/css/bootstrap.min.css" />
+		<!--Font Awesome-->
+		<link rel="stylesheet" href="${path}/common/font-awesome/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="${path}/common/Ionicons/css/ionicons.min.css" />
+		<!--Theme style-->
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/AdminLTE.min.css" />
+		<link rel="stylesheet" type="text/css" href="${path}/css/index.css" />
+		<!--AdminLTE Skins-->
+		<link rel="stylesheet" type="text/css" href="${path}/dist/css/skins/skin-blue.min.css" />
+		<!-- <link rel="icon" href="${path}/img/favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="${path}/img/favicon.ico" type="image/x-icon"/> -->
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="${path}/js/html5shiv/3.7.3/html5shiv.min.js}" ></script>
+			<script type="text/javascript" src="${path}/js/respond/1.4.2/respond.min.js}" ></script>	
+		<![endif]-->
+		<link rel="stylesheet" href="${path}/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="${path}/plugins/layer-v3.0.3/layer/skin/default/layer.css" />
+	</head>
+
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="#"><b>在线考试系统</b></a>
+			    </div>
+			
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			        <li><a href="/index"><i class="fa fa-home"></i>首页 <span class="sr-only">(current)</span></a></li>
+			        <li class="active"><a href="#"><i class="fa fa-edit"></i>试题练习</a></li>
+			        <li><a href="#"><i class="fa fa-dashboard"></i>会员管理</a></li>
+			        <li><a href="/setting"><i class="fa fa-cogs"></i>个人中心</a></li>
+			       
+			      </ul>
+			      <ul class="nav navbar-nav navbar-right">
+			     	<#if login_admin??>
+			     	 	<li><div style="margin-top: 8px;"><a href="#" class="btn btn-default">${login_admin.username}</a></div></li>
+					<#else>
+				        <li><div style="margin-top: 8px;"><a href="${path}/admin/login" class="btn btn-default">登陆</a></div></li>
+					</#if>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+		  </div>
+		</nav>
+		<div class="icon_content_holder center_content text-center" style="margin-top: 100px">
+			<div class="container">
+				<div class="icon_content_box">
+			          <div class="icon_column pull-left">
+			              <a href="#">
+			                  <div class="icon_photo"><img src="/ecms/img/icon4.png" alt=""></div>
+			                  <span>随机练习</span>
+			              </a>
+			          </div>
+			          <div class="icon_column pull-left">
+			              <a href="#" onclick="openlayer()">
+			                  <div class="icon_photo"><img src="/ecms/img/icon1.png" alt=""></div>
+			                  <span>强化练习</span>
+			              </a>
+			          </div>
+			          <div class="icon_column pull-left">
+			              <a href="/detail_error">
+			                  <div class="icon_photo"><img src="/ecms/img/icon2.png" alt=""></div>
+			                  <span>错题练习</span>
+			              </a>
+			          </div>
+			          <div class="icon_column pull-left">
+			              <a href="#" onclick="openpage()">
+			                  <div class="icon_photo"><img src="/ecms/img/icon3.png" alt=""></div>
+			                  <span>模拟考试</span>
+			              </a>
+			          </div>
+			    </div>
+			</div>
+		</div>
+		<footer class="footer bg-gray color-palette">
+			<hr>
+			<div class="container">
+			    <h4>
+			    	<strong>Copyright © 2018 <a href="#">Majun's online examination system</a>.</strong> All rights reserved.
+				    <div class="pull-right">
+				      <b>Version</b> 1.0.0
+				    </div>
+			    </h4>
+			</div>
+		</footer>
+		<script type="text/javascript" src="${path}/common/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="${path}/common/jquery-ui/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="${path}/common/select2/dist/js/select2.full.js"></script>
+		<script>
+			$.widget.bridge('uibutton', $.ui.button);
+		</script>
+		<script type="text/javascript" src="${path}/js/plugs.js"></script>
+		<script type="text/javascript" src="${path}/js/field_point.js"></script>
+		<script type="text/javascript" src="${path}/common/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="${path}/dist/js/adminlte.min.js"></script>
+		<script type="text/javascript" src="${path}/plugins/layer-v3.0.3/layer/layer.js" ></script>
+		<script type="text/javascript" src="${path}/plugins/iCheck/icheck.min.js"></script>
+		<script type="text/javascript">
+			function openlayer(){
+			    reload = false;
+			    layer.open({
+			        type:2,
+			        title:'选择想要练习的知识点',
+			        shadeClose:true,
+			        shade:0.85,
+			        area:['40%','50%'],
+			        content:'/strengthen',
+			        end:function(){
+			        	location.reload();
+			        }
+			    });
+			};
+			function openpage(){
+			    reload = false;
+			    layer.open({
+			        type:2,
+			        title:'选择想要练习的知识点',
+			        shadeClose:true,
+			        shade:0.85,
+			        area:['40%','50%'],
+			        content:'/list_page',
+			        end:function(){
+			        	location.reload();
+			        }
+			    });
+			};
+			function close(str){
+				window.location.href = str;
+			};
+		</script>
+	</body>
+
+</html>
