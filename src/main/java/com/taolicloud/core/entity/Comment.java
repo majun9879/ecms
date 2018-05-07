@@ -24,16 +24,16 @@ import javax.persistence.Table;
 
 /**
  * @author 马郡
- * @email  Accpect_Majun@163.com / mj@taolicloud.com 
+ * @email Accpect_Majun@163.com / mj@taolicloud.com
  * @className Comment
- * @date   2018年5月1日下午5:20:02
- * @desc  [用一句话描述改文件的功能]
+ * @date 2018年5月1日下午5:20:02
+ * @desc [用一句话描述改文件的功能]
  */
 
 @Entity
 @Table(name = "ECMS_COMMENT")
-public class Comment implements Serializable{
-	
+public class Comment implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -43,17 +43,19 @@ public class Comment implements Serializable{
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
 	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "user_id", nullable = true)
 	private User user;
-	
-	@ManyToOne(cascade = { CascadeType.REFRESH }, fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "question_id", nullable = true)
-	private Question question;
-	
-	@Column(name = "creat_time")
+
+	@Column(name = "question_id")
+	private Integer question;
+
+	@Column(name = "create_time")
 	private Date createTime;
+
+	@Column(name = "content")
+	private String content;
 
 	public Integer getId() {
 		return id;
@@ -71,11 +73,11 @@ public class Comment implements Serializable{
 		this.user = user;
 	}
 
-	public Question getQuestion() {
+	public Integer getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question question) {
+	public void setQuestion(Integer question) {
 		this.question = question;
 	}
 
@@ -86,5 +88,13 @@ public class Comment implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 }

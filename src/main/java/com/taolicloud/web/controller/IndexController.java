@@ -279,7 +279,7 @@ public class IndexController {
 				}
 			}
 		}
-		List<Comment> comments = commentService.findByQuestion(index);
+		List<Comment> comments = commentService.findByQuestion(index.getId());
 		float percentage = 0;
 		if (num > 0) {
 			percentage = num / list.size() * 100;
@@ -324,7 +324,7 @@ public class IndexController {
 				}
 			}
 		}
-		List<Comment> comments = commentService.findByQuestion(index);
+		List<Comment> comments = commentService.findByQuestion(index.getId());
 		float percentage = 0;
 		if (num > 0) {
 			percentage = num / list.size() * 100;
@@ -364,7 +364,7 @@ public class IndexController {
 					}
 				}
 			}
-			List<Comment> comments = commentService.findByQuestion(index);
+			List<Comment> comments = commentService.findByQuestion(index.getId());
 			model.put("size", questionHistories.size());
 			model.addAttribute("index", index);
 			model.addAttribute("pre", pre);
@@ -399,7 +399,7 @@ public class IndexController {
 					}
 				}
 			}
-			List<Comment> comments = commentService.findByQuestion(index);
+			List<Comment> comments = commentService.findByQuestion(index.getId());
 			model.put("size", questionHistories.size());
 			model.addAttribute("index", index);
 			model.addAttribute("pre", pre);
@@ -464,6 +464,31 @@ public class IndexController {
 		return Data.success(Data.NOOP);
 	}
 
+	@GetMapping(value="/submit_comment")
+	@ResponseBody
+	Data submit_comment(String content,Integer qId, Integer uId) {
+		
+		User user = userService.findById(uId);
+		if (user == null) {
+			return Data.failured("未登录");
+		}
+		
+		Comment comment = new Comment();
+		User po = new User();
+		po.setId(user.getId());
+		po.setUsername(user.getUsername());
+		
+		comment.setUser(user);
+		comment.setQuestion(qId);
+		comment.setCreateTime(new Date());
+		comment.setContent(content);
+		
+		commentService.saveAndFlush(comment);
+	
+		comment.setUser(po);
+		return Data.success(comment);
+	}
+
 	@GetMapping("/user_page")
 	public String user_page(Model model, HttpSession session) {
 		User user = (User) session.getAttribute(Const.LOGIN_ADMIN);
@@ -472,11 +497,11 @@ public class IndexController {
 		}
 		user = userService.findByUsername(user.getUsername());
 		List<PageHistory> pageHistories = pageHistoryService.findAllByPageAndUserAndStatus(null, user, false);
-		
+
 		model.addAttribute("list", pageHistories);
 		return "user_page";
 	}
-	
+
 	@GetMapping("/user_question")
 	public String user_question(Model model, HttpSession session) {
 		User user = (User) session.getAttribute(Const.LOGIN_ADMIN);
@@ -519,21 +544,21 @@ public class IndexController {
 						result.setWrongTimes(wrong);
 						result.setRightTimes(right);
 						tmp.add(result);
-						sum+=questions.size();
-						sure+=right;
+						sum += questions.size();
+						sure += right;
 					}
 				}
 				list.put(knowledgePoint.getName(), tmp);
-				if(sum!=0 && sure!=0) {
-					points.put(knowledgePoint.getName(), sure/sum*100);
-				}else {
+				if (sum != 0 && sure != 0) {
+					points.put(knowledgePoint.getName(), sure / sum * 100);
+				} else {
 					points.put(knowledgePoint.getName(), (float) 0);
 				}
 			}
 			model.addAttribute("points", points);
 			model.addAttribute("list", list);
 			return "uesr_question";
-		}else {
+		} else {
 			return "error/field_unfound";
 		}
 	}

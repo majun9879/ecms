@@ -100,40 +100,13 @@ public class User implements Serializable {
 	private Set<QuestionHistory> questionHistories = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	private Set<Comment> comment = new HashSet<>();
+	private Set<PageHistory> pageHistories = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	private Set<PageHistory> pageHistories = new HashSet<>();
+	private Set<Comment> comments = new HashSet<>();
 
 	public User() {
 		super();
-	}
-
-	public User(Integer id, String username, String password, String salt, String realname, String email, String phone,
-			Integer status, Date createTime, Integer fieldId, String fieldName, Integer typeId, String typeName,
-			Date lastLoginTime, String province, String company, String department,
-			Set<QuestionHistory> questionHistories, Set<Comment> comment, Set<PageHistory> pageHistories) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.salt = salt;
-		this.realname = realname;
-		this.email = email;
-		this.phone = phone;
-		this.status = status;
-		this.createTime = createTime;
-		this.fieldId = fieldId;
-		this.fieldName = fieldName;
-		this.typeId = typeId;
-		this.typeName = typeName;
-		this.lastLoginTime = lastLoginTime;
-		this.province = province;
-		this.company = company;
-		this.department = department;
-		this.questionHistories = questionHistories;
-		this.comment = comment;
-		this.pageHistories = pageHistories;
 	}
 
 	public Integer getId() {
@@ -284,20 +257,20 @@ public class User implements Serializable {
 		this.questionHistories = questionHistories;
 	}
 
-	public Set<Comment> getComment() {
-		return comment;
-	}
-
-	public void setComment(Set<Comment> comment) {
-		this.comment = comment;
-	}
-
 	public Set<PageHistory> getPageHistories() {
 		return pageHistories;
 	}
 
 	public void setPageHistories(Set<PageHistory> pageHistories) {
 		this.pageHistories = pageHistories;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

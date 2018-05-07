@@ -209,6 +209,35 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-8 col-md-push-4">
+				<div class="box box-primary">
+		            <div class="box-body box-profile">
+		            	<div id="comment-title" style="margin-bottom:15px;">
+							<i class="fa fa-comments"></i>
+							<span> 学员评论 </span>
+						</div>
+		            </div>
+		            <form class="comment-form">
+						<textarea rows="" cols="" style="width:100%;height:95px;" placeholder="随便说点什么吧..."></textarea>
+						<input class="btn btn-primary" type="button" value="发表评论" onclick="submit_comment(${index.id},${login_admin.id})">
+					</form>
+					<div class="content">
+						<ul class="comment-list">
+							<#list comments as view>
+								<li class="comment-list-item">
+									<div class="comment-user-container">
+										<div>
+											<img src="/ecms/img/photo.jpg" class="comment-user-img">
+										</div>
+									<div class="comment-user-info"><div>${view.user.username}</div>
+									<div class="comment-date"><span>发表于：</span>${view.createTime}</div></div></div>
+									<p class="comment-user-text">${view.content}</p>
+								</li>
+							</#list>
+						</ul>
+					</div>
+			    </div>
+			</div>
 		</div>
 		
 		<footer class="footer bg-gray color-palette">
@@ -291,6 +320,75 @@
 					}
 				});
 			}
+			Date.prototype.Format = function (fmt) { //author: meizz 
+	            var o = {
+	                "M+": this.getMonth() + 1, //月份 
+	                "d+": this.getDate(), //日 
+	                "h+": this.getHours(), //小时 
+	                "m+": this.getMinutes(), //分 
+	                "s+": this.getSeconds(), //秒 
+	                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	                "S": this.getMilliseconds() //毫秒 
+	            };
+	            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	            for (var k in o)
+	            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	            return fmt;
+	        }
+			function submit_comment(qId,uId) {
+					var content = $(".comment-form textarea").val();
+					
+					if(content==null||content==""){
+						layer.msg('评论不能为空！', {icon:6,time:1000});
+						return false;
+					}else if(content.length > 140){
+						layer.msg('不能超过140个字！', {icon:6,time:1000});
+						return false;
+					}
+					
+					$.ajax({
+						url:"/submit_comment",
+						type:'get',
+						headers : {
+							'Accept' : 'application/json',
+							'Content-Type' : 'application/json'
+						},
+						data : {
+							content:content,
+							qId:qId,
+							uId:uId
+						},
+						cache:false,
+						success : function(msg) {
+							
+							if (msg.code == 0) {
+								var view = msg.data;
+								var time = new Date(msg.data.createTime).Format("yyyy-MM-dd  hh:mm:ss ");
+								$(".comment-list").append(
+									"<li class=\"comment-list-item\">\n"+
+										"<div class=\"comment-user-container\">\n"+
+											"<div>\n"+
+												"<img src=\"/ecms/img/photo.jpg\" class=\"comment-user-img\">\n"+
+											"</div>\n"+
+											"<div class=\"comment-user-info\">\n"+
+												"<div>"+view.user.username+"</div>\n"+
+												"<div class=\"comment-date\"><span>发表于：</span>"+time+"</div>\n"+
+											"</div>\n"+
+										"</div>\n"+
+										"<p class=\"comment-user-text\">"+view.content+"</p>\n"+
+									"</li>\n"
+								);
+								
+							} else {
+								layer.msg('提交失敗，请稍后再试！', {icon:6,time:1000});
+							}
+						},
+						error : function(msg) {
+							layer.msg('系统正忙，请稍后再试！', {icon:6,time:1000});
+						}
+					});
+					
+				};
 		</script>
 	</body>
 

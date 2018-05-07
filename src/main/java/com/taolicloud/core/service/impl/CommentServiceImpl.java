@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import com.taolicloud.core.dao.CommentDao;
 import com.taolicloud.core.entity.Comment;
-import com.taolicloud.core.entity.Question;
 import com.taolicloud.core.service.CommentService;
 
 /**
@@ -96,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> findByQuestion(Question index) {
+	public List<Comment> findByQuestion(Integer index) {
 		List<Comment> list = commentDao.findAll((root, query, builder) -> {
 
 			List<Order> orders = new ArrayList<>();
@@ -105,9 +104,9 @@ public class CommentServiceImpl implements CommentService {
 			
 			Predicate predicate = builder.conjunction();
 
-			if (index != null && index.getId() > 0) {
+			if (index != null && index > 0) {
 				predicate.getExpressions().add(
-						builder.equal(root.get("question").as(Question.class), index));
+						builder.equal(root.get("question").as(Integer.class), index));
 			}
 			
 			query.orderBy(orders);

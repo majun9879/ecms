@@ -108,9 +108,6 @@ public class Question implements Serializable {
 	@OneToMany(mappedBy = "question", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	private Set<QuestionHistory> questionHistories = new HashSet<>();
 
-	@OneToMany(mappedBy = "question", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-	private Set<Comment> comment = new HashSet<>();
-
 	@Column(name = "creator")
 	private String creator;
 
@@ -267,14 +264,6 @@ public class Question implements Serializable {
 
 	public void setQuestionHistories(Set<QuestionHistory> questionHistories) {
 		this.questionHistories = questionHistories;
-	}
-
-	public Set<Comment> getComment() {
-		return comment;
-	}
-
-	public void setComment(Set<Comment> comment) {
-		this.comment = comment;
 	}
 
 }

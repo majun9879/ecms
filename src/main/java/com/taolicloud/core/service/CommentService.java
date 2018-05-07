@@ -11,7 +11,6 @@ package com.taolicloud.core.service;
 import java.util.List;
 
 import com.taolicloud.core.entity.Comment;
-import com.taolicloud.core.entity.Question;
 import com.taolicloud.core.service.base.SimpleService;
 
 /**
@@ -23,6 +22,6 @@ import com.taolicloud.core.service.base.SimpleService;
  */
 public interface CommentService extends SimpleService<Comment, Integer>{
 
-	List<Comment> findByQuestion(Question index);
+	List<Comment> findByQuestion(Integer index);
 
 }
