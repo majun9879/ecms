@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.taolicloud.core.entity.Comment;
 import com.taolicloud.core.entity.Field;
 import com.taolicloud.core.entity.KnowledgePoint;
+import com.taolicloud.core.entity.Notice;
 import com.taolicloud.core.entity.Page;
 import com.taolicloud.core.entity.PageHistory;
 import com.taolicloud.core.entity.Question;
@@ -39,6 +40,7 @@ import com.taolicloud.core.entity.util.QuestionImproveResult;
 import com.taolicloud.core.service.CommentService;
 import com.taolicloud.core.service.FieldService;
 import com.taolicloud.core.service.KnowledgePointService;
+import com.taolicloud.core.service.NoticeService;
 import com.taolicloud.core.service.PageHistoryService;
 import com.taolicloud.core.service.PageService;
 import com.taolicloud.core.service.QuestionHistoryService;
@@ -88,9 +90,13 @@ public class IndexController {
 	@Autowired
 	private PageHistoryService pageHistoryService;
 
+	@Autowired
+	NoticeService noticeService;
+
 	@GetMapping(value = { "/", "/index" })
 	public String index(Model model) {
-
+		List<Notice> notices = noticeService.findByFlag(1);
+		model.addAttribute("notices", notices);
 		return "index";
 	}
 
@@ -464,27 +470,27 @@ public class IndexController {
 		return Data.success(Data.NOOP);
 	}
 
-	@GetMapping(value="/submit_comment")
+	@GetMapping(value = "/submit_comment")
 	@ResponseBody
-	Data submit_comment(String content,Integer qId, Integer uId) {
-		
+	Data submit_comment(String content, Integer qId, Integer uId) {
+
 		User user = userService.findById(uId);
 		if (user == null) {
 			return Data.failured("未登录");
 		}
-		
+
 		Comment comment = new Comment();
 		User po = new User();
 		po.setId(user.getId());
 		po.setUsername(user.getUsername());
-		
+
 		comment.setUser(user);
 		comment.setQuestion(qId);
 		comment.setCreateTime(new Date());
 		comment.setContent(content);
-		
+
 		commentService.saveAndFlush(comment);
-	
+
 		comment.setUser(po);
 		return Data.success(comment);
 	}
