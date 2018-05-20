@@ -161,11 +161,9 @@ public class IndexController {
 
 			long time = 0;
 			if (po != null) {
-				time = page.getDuration() * 60 + po.getCreateTime().getTime() - new Date().getTime();
+				time = page.getDuration() * 60 *1000 + po.getCreateTime().getTime() - new Date().getTime();
 				model.addAttribute("pageHistory", po);
-
 			} else {
-
 				PageHistory pageHistory = new PageHistory();
 				pageHistory.setStatus(true);
 				pageHistory.setPage(page);
@@ -173,11 +171,16 @@ public class IndexController {
 				pageHistory.setCreateTime(new Date());
 				pageHistoryService.saveAndFlush(pageHistory);
 
-				time = page.getDuration() * 60 + pageHistory.getCreateTime().getTime() - new Date().getTime();
+				time = page.getDuration() * 60 * 1000 + pageHistory.getCreateTime().getTime() - new Date().getTime();
 				model.addAttribute("pageHistory", pageHistory);
 
 			}
-
+			time = time - time%1000;
+			if(time>0){
+				time /= 1000;
+			}else{
+				time = 0;
+			}
 			model.addAttribute("time", String.valueOf(time));
 			model.addAttribute("questions", questions);
 			model.addAttribute("page", page);
