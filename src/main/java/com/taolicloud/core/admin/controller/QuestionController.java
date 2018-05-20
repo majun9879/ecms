@@ -150,7 +150,6 @@ public class QuestionController {
 	@RequiresRoles(value = {"ADMIN","TEACHER"}, logical= Logical.OR)
 	@PostMapping("/edit")
 	@ResponseBody
-	@SuppressWarnings("unlikely-arg-type")
 	Message edit(@RequestBody Question question) {
 		Message message = new Message();
 		Question po = questionService.findById(question.getId());

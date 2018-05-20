@@ -298,7 +298,7 @@ public class PageController {
 			for (QuestionPage po : questions) {
 				if (po.getQuestion().getQuestionType().getId() == type) {
 					po.setPoints(points);
-					questionPageService.saveAndFlush(po);
+					questionPageService.updata(po);
 				}
 			}
 			data = Data.success(Data.NOOP);

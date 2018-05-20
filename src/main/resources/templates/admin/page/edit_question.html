@@ -68,7 +68,7 @@
 					contentType:'application/x-www-form-urlencoded',
 					encoding:'utf-8',
 					url:"${path}/admin/page/editPoints",
-					type:'POST',
+					type:'post',
 					data:{
 						qid:qid,
 						pid:pid,
@@ -91,29 +91,34 @@
 				});
 			});
 			$("#update-point-type-btn").click(function(){
+				
+				var pid = ${page.id};
+				var qid = ${question.id};
+				var points = $("#points").val();
+				var type=${question.questionType.id};
 				$.ajax({
 					contentType:'application/x-www-form-urlencoded',
 					encoding:'utf-8',
 					url:"${path}/admin/page/editPoints",
-					type:'POST',
+					type:'post',
 					data:{
-						pid:${page.id},
-						qid:${question.id},
-						points:$("#points").value(),
-						type:${question.questionType.id}
+						pid:pid,
+						qid:qid,
+						points:points,
+						type:type
 					},
 					cache:false,
 					async:false,
 					success:function(msg){
-					   if(msg.code == 0){
-						   var index = parent.layer.getFrameIndex(window.name);
-						   parent.layer.close(index);
-					   }else{
-						   layer.msg('添加失败！', {icon:6,time:1000});
-					   }
+						   if(msg.code == 0){
+							   var index = parent.layer.getFrameIndex(window.name);
+							   parent.layer.close(index);
+						   }else{
+							   layer.msg('添加失败！', {icon:6,time:1000});
+						   }
 					},
 					error:function(msg){
-						layer.msg('服务器错误，请稍后再试！', {icon:6,time:1000});
+							layer.msg('服务器错误，请稍后再试！', {icon:6,time:1000});
 					}
 				});
 			});
